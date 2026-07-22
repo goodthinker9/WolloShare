@@ -1,8 +1,24 @@
 import { Router } from 'express';
+import authRoutes from './authRoutes.js';
+import verificationRoutes from './verificationRoutes.js';
+import resourceRoutes from './resourceRoutes.js';
+import authMiddleware from '../middleware/authMiddleware.js';
+import roleMiddleware from '../middleware/roleMiddleware.js';
+import verificationController from '../controllers/verificationController.js';
+import {
+  getPendingResources,
+  approveResource,
+  rejectResource,
+} from '../controllers/resourceController.js';
+import {
+  validateResourceId,
+  validateAdminDecision,
+  handleValidationErrors,
+} from '../validators/resourceValidator.js';
 
 const router = Router();
 
-// Health check endpoint for deployment and monitoring.
+// ── Health check ─────────────────────────────────────────────────
 router.get('/health', (req, res) => {
   res.status(200).json({
     success: true,
@@ -10,17 +26,49 @@ router.get('/health', (req, res) => {
   });
 });
 
-// Placeholder route group definitions for future modules.
-const futureModulePlaceholder = (req, res) => {
-  res.status(501).json({
-    success: false,
-    message: 'This module will be implemented in a future phase.',
-  });
-};
+// ── Auth routes ───────────────────────────────────────────────────
+router.use('/auth', authRoutes);
 
-router.use('/auth', futureModulePlaceholder);
-router.use('/students/verification', futureModulePlaceholder);
-router.use('/resources', futureModulePlaceholder);
-router.use('/admin', futureModulePlaceholder);
+// ── Student verification status ──────────────────────────────────
+router.get(
+  '/student/verification-status',
+  authMiddleware,
+  roleMiddleware('student'),
+  verificationController.getStudentVerificationStatus
+);
+
+// ── Admin verification management ────────────────────────────────
+router.use('/admin/verifications', verificationRoutes);
+
+// ── Resource routes (student + public) ────────────────────────────
+router.use('/resources', resourceRoutes);
+
+// ── Admin resource management ─────────────────────────────────────
+router.get(
+  '/admin/resources/pending',
+  authMiddleware,
+  roleMiddleware('admin'),
+  getPendingResources
+);
+
+router.put(
+  '/admin/resources/:id/approve',
+  authMiddleware,
+  roleMiddleware('admin'),
+  validateResourceId,
+  handleValidationErrors,
+  approveResource
+);
+
+router.put(
+  '/admin/resources/:id/reject',
+  authMiddleware,
+  roleMiddleware('admin'),
+  validateResourceId,
+  validateAdminDecision,
+  handleValidationErrors,
+  rejectResource
+);
 
 export default router;
+

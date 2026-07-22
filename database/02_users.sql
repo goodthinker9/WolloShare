@@ -31,6 +31,8 @@ CREATE TABLE IF NOT EXISTS student_verifications (
     id_card_front_image VARCHAR(255) NOT NULL,
     verification_status ENUM('pending', 'verified', 'rejected') NOT NULL DEFAULT 'pending',
     verified_by BIGINT UNSIGNED DEFAULT NULL,
+    verified_at TIMESTAMP NULL DEFAULT NULL,
+    rejection_reason TEXT DEFAULT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uq_student_verifications_user (user_id),
