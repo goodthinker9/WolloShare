@@ -5,6 +5,7 @@ import resourceRoutes from './resourceRoutes.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 import roleMiddleware from '../middleware/roleMiddleware.js';
 import verificationController from '../controllers/verificationController.js';
+import dashboardController from '../controllers/dashboardController.js';
 import {
   getPendingResources,
   approveResource,
@@ -35,6 +36,14 @@ router.get(
   authMiddleware,
   roleMiddleware('student'),
   verificationController.getStudentVerificationStatus
+);
+
+// ── Student dashboard ─────────────────────────────────────────────
+router.get(
+  '/dashboard/student',
+  authMiddleware,
+  roleMiddleware('student'),
+  dashboardController.getStudentDashboard
 );
 
 // ── Admin verification management ────────────────────────────────
