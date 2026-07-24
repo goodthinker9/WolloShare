@@ -5,6 +5,10 @@ import resourceRoutes from './resourceRoutes.js';
 import reportRoutes from './reportRoutes.js';
 import bookmarkRoutes from './bookmarkRoutes.js';
 import ratingRoutes from './ratingRoutes.js';
+import downloadRoutes from './downloadRoutes.js';
+import profileRoutes from './profileRoutes.js';
+import notificationRoutes from './notificationRoutes.js';
+import adminUserRoutes from './adminUserRoutes.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 import roleMiddleware from '../middleware/roleMiddleware.js';
 import verificationController from '../controllers/verificationController.js';
@@ -99,5 +103,17 @@ router.use('/bookmarks', bookmarkRoutes);
 
 // ── Rating routes (authenticated + public) ─────────────────────────
 router.use('/ratings', ratingRoutes);
+
+// ── Download routes (authenticated + public) ───────────────────────
+router.use('/downloads', downloadRoutes);
+
+// ── Profile routes (authenticated) ─────────────────────────────────
+router.use('/profile', profileRoutes);
+
+// ── Notification routes (authenticated) ────────────────────────────
+router.use('/notifications', notificationRoutes);
+
+// ── Admin user management (admin only) ─────────────────────────────
+router.use('/admin/users', adminUserRoutes);
 
 export default router;
