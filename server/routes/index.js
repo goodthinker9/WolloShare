@@ -2,6 +2,9 @@ import { Router } from 'express';
 import authRoutes from './authRoutes.js';
 import verificationRoutes from './verificationRoutes.js';
 import resourceRoutes from './resourceRoutes.js';
+import reportRoutes from './reportRoutes.js';
+import bookmarkRoutes from './bookmarkRoutes.js';
+import ratingRoutes from './ratingRoutes.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 import roleMiddleware from '../middleware/roleMiddleware.js';
 import verificationController from '../controllers/verificationController.js';
@@ -88,5 +91,13 @@ router.put(
   rejectResource
 );
 
-export default router;
+// ── Report routes (student + admin) ────────────────────────────────
+router.use('/reports', reportRoutes);
 
+// ── Bookmark routes (authenticated users) ──────────────────────────
+router.use('/bookmarks', bookmarkRoutes);
+
+// ── Rating routes (authenticated + public) ─────────────────────────
+router.use('/ratings', ratingRoutes);
+
+export default router;
