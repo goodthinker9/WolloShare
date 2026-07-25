@@ -55,15 +55,17 @@ const getStatistics = async (userId) => {
 const getRecentUploads = async (userId) => {
   const [rows] = await pool.query(
     `SELECT
-      id,
-      title,
-      resource_type,
-      approval_status,
-      download_count,
-      created_at
-    FROM resources
-    WHERE uploader_id = ?
-    ORDER BY created_at DESC
+      r.id,
+      r.title,
+      r.resource_type,
+      r.approval_status,
+      r.download_count,
+      r.created_at,
+      c.course_name
+    FROM resources r
+    LEFT JOIN courses c ON c.id = r.course_id
+    WHERE r.uploader_id = ?
+    ORDER BY r.created_at DESC
     LIMIT 5`,
     [userId]
   );
