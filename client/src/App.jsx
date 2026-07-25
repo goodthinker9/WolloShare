@@ -1,23 +1,19 @@
-import { Routes, Route } from 'react-router-dom';
-import MainLayout from './layouts/MainLayout';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import NotFound from './pages/NotFound';
+import { AuthProvider } from './context/AuthContext';
+import AppRoutes from './routes/AppRoutes';
 
+/**
+ * Root application component.
+ *
+ * Wraps the entire route tree inside an AuthProvider so that
+ * every page can access authentication state through the useAuth hook.
+ */
 function App() {
   return (
-    <MainLayout>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </MainLayout>
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
   );
 }
 
 export default App;
+
