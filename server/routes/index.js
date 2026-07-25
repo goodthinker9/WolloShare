@@ -9,6 +9,7 @@ import downloadRoutes from './downloadRoutes.js';
 import profileRoutes from './profileRoutes.js';
 import notificationRoutes from './notificationRoutes.js';
 import adminUserRoutes from './adminUserRoutes.js';
+import analyticsRoutes from './analyticsRoutes.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 import roleMiddleware from '../middleware/roleMiddleware.js';
 import verificationController from '../controllers/verificationController.js';
@@ -115,5 +116,8 @@ router.use('/notifications', notificationRoutes);
 
 // ── Admin user management (admin only) ─────────────────────────────
 router.use('/admin/users', adminUserRoutes);
+
+// ── Admin analytics (admin only) ───────────────────────────────────
+router.use('/admin/analytics', analyticsRoutes);
 
 export default router;
