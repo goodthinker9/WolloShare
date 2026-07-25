@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import resourceModel from '../models/resourceModel.js';
 import userModel from '../models/userModel.js';
+import { deleteFile } from '../utils/fileUtils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -353,6 +354,34 @@ const rejectResource = async ({ id, rejectionReason }) => {
   return { success: true, message: 'Resource rejected successfully' };
 };
 
+// ──────────────────────────────────────────────
+// ADMIN: DELETE RESOURCE (with file cleanup)
+// ──────────────────────────────────────────────
+
+const adminDeleteResource = async ({ id }) => {
+  const resource = await resourceModel.findById(id);
+
+  if (!resource) {
+    const error = new Error('Resource not found');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const affectedRows = await resourceModel.deleteResourceById(id);
+
+  if (!affectedRows) {
+    const error = new Error('Failed to delete resource');
+    error.statusCode = 500;
+    throw error;
+  }
+
+  // Delete the physical uploaded file using fileUtils
+  const filePath = path.resolve(uploadDir, resource.file_name);
+  deleteFile(filePath);
+
+  return { success: true, message: 'Resource deleted successfully' };
+};
+
 export default {
   createResource,
   getMyResources,
@@ -364,5 +393,6 @@ export default {
   getPendingResources,
   approveResource,
   rejectResource,
+  adminDeleteResource,
 };
 

@@ -172,13 +172,26 @@ const updateResource = async ({
 };
 
 // ──────────────────────────────────────────────
-// DELETE
+// DELETE (owner-scoped)
 // ──────────────────────────────────────────────
 
 const deleteResource = async (id, uploaderId) => {
   const [result] = await pool.query(
     'DELETE FROM resources WHERE id = ? AND uploader_id = ?',
     [id, uploaderId]
+  );
+
+  return result.affectedRows;
+};
+
+// ──────────────────────────────────────────────
+// DELETE (admin — no owner check)
+// ──────────────────────────────────────────────
+
+const deleteResourceById = async (id) => {
+  const [result] = await pool.query(
+    'DELETE FROM resources WHERE id = ?',
+    [id]
   );
 
   return result.affectedRows;
@@ -434,6 +447,7 @@ export default {
   findByUploader,
   updateResource,
   deleteResource,
+  deleteResourceById,
   listApprovedResources,
   countApprovedResources,
   getPendingResources,

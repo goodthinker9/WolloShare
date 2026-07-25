@@ -10,6 +10,7 @@ import profileRoutes from './profileRoutes.js';
 import notificationRoutes from './notificationRoutes.js';
 import adminUserRoutes from './adminUserRoutes.js';
 import analyticsRoutes from './analyticsRoutes.js';
+import fileRoutes from './fileRoutes.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 import roleMiddleware from '../middleware/roleMiddleware.js';
 import verificationController from '../controllers/verificationController.js';
@@ -119,5 +120,8 @@ router.use('/admin/users', adminUserRoutes);
 
 // ── Admin analytics (admin only) ───────────────────────────────────
 router.use('/admin/analytics', analyticsRoutes);
+
+// ── Secure file download (authenticated users) ─────────────────────
+router.use('/files', fileRoutes);
 
 export default router;
